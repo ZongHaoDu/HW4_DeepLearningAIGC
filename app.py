@@ -65,7 +65,7 @@ model = load_keras_model()
 if model is not None:
     # --- Example Selector ---
     example_images = glob.glob(os.path.join(EXAMPLE_DIR, '*.jpg'))
-    example_filenames = ["None"] + [os.path.basename(p) for p in example_images]
+    example_filenames = [os.path.basename(p) for p in example_images]
     selected_example = st.selectbox("Or select an example:", options=example_filenames)
 
     # --- File Uploader ---
