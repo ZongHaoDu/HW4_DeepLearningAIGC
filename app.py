@@ -73,14 +73,14 @@ if model is not None:
     
     image_to_process = None
 
-    if selected_example != "None":
+    if uploaded_file is not None:
+        image_to_process = Image.open(uploaded_file)
+        st.write("Using uploaded image.")
+    elif selected_example != "None":
         example_path = os.path.join(EXAMPLE_DIR, selected_example)
         if os.path.exists(example_path):
             image_to_process = Image.open(example_path)
             st.write("Using selected example.")
-    elif uploaded_file is not None:
-        image_to_process = Image.open(uploaded_file)
-        st.write("Using uploaded image.")
 
     if image_to_process:
         predict_and_display(image_to_process, model)
