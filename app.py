@@ -17,8 +17,27 @@ EXAMPLE_DIR = './Test/'
 # --- Model Loading ---
 @st.cache_resource
 def load_keras_model():
-    # ... (保持不變) ...
-    return None # 這裡假設你原本的 code
+    def load_keras_model():
+
+    """
+
+    Loads the pre-trained Keras model.
+
+    The @st.cache_resource decorator ensures the model is loaded only once.
+
+    """
+
+    try:
+
+        model = load_model(MODEL_PATH)
+
+        return model
+
+    except Exception as e:
+
+        st.error(f"Error loading model: {e}")
+
+        return None
 
 # --- Logic ---
 def main():
