@@ -63,25 +63,44 @@ st.write("Upload an image of a dog, or select one of the examples below.")
 model = load_keras_model()
 
 if model is not None:
-    # --- Example Selector ---
+    # When an example is selected, this callback will clear the uploaded file
+    def clear_upload_on_example_select():
+        st.session_state.uploaded_file = None
+
+    # --- UI Widgets ---
     example_images = glob.glob(os.path.join(EXAMPLE_DIR, '*.jpg'))
     example_filenames = [os.path.basename(p) for p in example_images]
-    selected_example = st.selectbox("Or select an example:", options=example_filenames)
+    
+    selected_example = st.selectbox(
+        "Or select an example:",
+        options=example_filenames,
+        on_change=clear_upload_on_example_select,
+        # Add a key to help Streamlit manage state
+        key='example_selector' 
+    )
 
-    # --- File Uploader ---
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader(
+        "Choose an image...",
+        type=["jpg", "jpeg", "png"],
+        # The key links the widget to the session state
+        key='uploaded_file'
+    )
     
     image_to_process = None
 
-    if uploaded_file is not None:
-        image_to_process = Image.open(uploaded_file)
+    # --- Logic to select which image to process ---
+    # If a file is in the session state, use it.
+    if st.session_state.get('uploaded_file') is not None:
+        image_to_process = Image.open(st.session_state.uploaded_file)
         st.write("Using uploaded image.")
-    elif selected_example != "None":
+    # Otherwise, use the selected example.
+    elif selected_example:
         example_path = os.path.join(EXAMPLE_DIR, selected_example)
         if os.path.exists(example_path):
             image_to_process = Image.open(example_path)
             st.write("Using selected example.")
 
+    # --- Display prediction ---
     if image_to_process:
         predict_and_display(image_to_process, model)
 
