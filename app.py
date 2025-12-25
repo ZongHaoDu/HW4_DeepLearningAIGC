@@ -52,7 +52,7 @@ def mark_example():
 
 # --- 4. 主要 UI 與邏輯 ---
 def main():
-    st.title("狗狗品種辨識器 (動態切換版)")
+    st.title("Labrador、Labrador 狗品種辨識器 ")
     model = load_keras_model()
     
     if model is None:
